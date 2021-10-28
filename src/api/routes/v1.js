@@ -2,75 +2,56 @@
 'use strict';
 
 const express = require('express');
-const dataModules = require('../../models');
+const { riddles } = require('../../models');
 
 const router = express.Router();
 
-router.param('model', (req, res, next) => {
-  const modelName = req.params.model;
-  if (dataModules[modelName]) {
-    req.model = dataModules[modelName];
-    next();
-  } else {
-    next('Invalid Model');
-  }
-});
+router.get('/riddle', handleGetRandomRiddle);
+router.get('/riddle/:id', handleGetOneRiddle);
+router.get('/hint/:id', handleGetHint);
+router.get('/answer/:id', handleGetAnswer);
 
-router.get('/:model', handleGetAll);
-router.get('/:model/:id', handleGetOne);
-router.post('/:model', handleCreate);
-router.put('/:model/:id', handleUpdate);
-router.delete('/:model/:id', handleDelete);
-
-async function handleGetAll(req, res) {
+async function handleGetRandomRiddle(req, res) {
   try {
-    let allRecords = await req.model.get();
-    res.status(200).json(allRecords);
+    let randomRiddle = await riddles.findOne({order: 'random()'});
+    res.status(200).json(randomRiddle);
   } catch (err) {
     console.error(err)
   }
 }
 
-async function handleGetOne(req, res) {
+async function handleGetOneRiddle(req, res) {
   try {
     const id = req.params.id;
-    let theRecord = await req.model.get(id)
-    res.status(200).json(theRecord);
+    let theRiddle = await riddles.findByPk(id);
+    res.status(200).json(theRiddle);
   } catch (err) {
     console.error(err)
   }
 }
 
-async function handleCreate(req, res) {
-  try {
-    let obj = req.body;
-    let newRecord = await req.model.create(obj);
-    res.status(201).json(newRecord);
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-async function handleUpdate(req, res) {
+async function handleGetHint(req, res) {
   try {
     const id = req.params.id;
-    const obj = req.body;
-    let updatedRecord = await req.model.update(id, obj)
-    res.status(200).json(updatedRecord);
+    let theRiddle = await riddles.findByPk(id);
+    let theHint = { hint: 'No hints available.' }
+    if (theRiddle.hint) {
+      theHint = theRiddle.hint;
+    }
+    res.status(200).json(theHint);
   } catch (err) {
     console.error(err)
   }
 }
 
-async function handleDelete(req, res) {
+async function handleGetAnswer(req, res) {
   try {
-    let id = req.params.id;
-    let deletedRecord = await req.model.delete(id);
-    res.status(200).json(deletedRecord);
+    const id = req.params.id;
+    let theRiddle = await riddles.findByPk(id);
+    res.status(200).json(theRiddle.answer);
   } catch (err) {
     console.error(err)
   }
 }
-
 
 module.exports = router;
