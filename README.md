@@ -1,12 +1,16 @@
-# auth-api
+# riddleMeThis
 
-Created by Evan Woodworth
+Created by Evan, Tray, Cameron
+
+## Description
+
+
 
 ## Links to application deployment
 
-Heroku: https://evans-auth-api.herokuapp.com/  
-Github Pull Request: https://github.com/evan-woodworth/auth-api/pull/1
+Heroku: 
+Github Pull Request: 
 
 ## UML
 
-![UML](./img/auth-api.png)
+![UML](./img/riddleMeThis.png)
