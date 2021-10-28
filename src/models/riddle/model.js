@@ -10,17 +10,9 @@ const riddleModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    hint01: {
+    hint: {
       type: DataTypes.STRING,
       required: false,
-    },
-    hint02: {
-      type: DataTypes.STRING,
-      required: false,
-    },
-    hint03: {
-      type: DataTypes.STRING,
-      required: false,
-    },
+    }
   });
 }
