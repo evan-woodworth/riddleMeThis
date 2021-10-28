@@ -2,77 +2,45 @@
 'use strict';
 
 const express = require('express');
-const dataModules = require('../../models');
+const { riddles } = require('../../models');
 const bearerHandler = require('../../auth/middleware/bearer.js');
 const aclHandler = require('../../auth/middleware/acl.js');
 
 const router = express.Router();
 
-router.param('model', (req, res, next) => {
-  const modelName = req.params.model;
-  if (dataModules[modelName]) {
-    req.model = dataModules[modelName];
-    next();
-  } else {
-    next('Invalid Model');
-  }
-});
+router.post('/riddle', bearerHandler, aclHandler('create'), handleCreateRiddle);
+router.put('/riddle/:id', bearerHandler, aclHandler('update'), handleUpdateRiddle);
+router.delete('/riddle/:id', bearerHandler, aclHandler('delete'), handleDeleteRiddle);
 
-router.get('/:model', bearerHandler, aclHandler('read'), handleGetAll);
-router.get('/:model/:id', bearerHandler, aclHandler('read'), handleGetOne);
-router.post('/:model', bearerHandler, aclHandler('create'), handleCreate);
-router.put('/:model/:id', bearerHandler, aclHandler('update'), handleUpdate);
-router.delete('/:model/:id', bearerHandler, aclHandler('delete'), handleDelete);
-
-async function handleGetAll(req, res) {
-  try {
-    let allRecords = await req.model.get();
-    res.status(200).json(allRecords);
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-async function handleGetOne(req, res) {
-  try {
-    const id = req.params.id;
-    let theRecord = await req.model.get(id)
-    res.status(200).json(theRecord);
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-async function handleCreate(req, res) {
+async function handleCreateRiddle(req, res) {
   try {
     let obj = req.body;
-    let newRecord = await req.model.create(obj);
-    res.status(201).json(newRecord);
+    let newRiddle = await riddles.create(obj);
+    res.status(201).json(newRiddle);
   } catch (err) {
     console.error(err)
   }
 }
 
-async function handleUpdate(req, res) {
+async function handleUpdateRiddle(req, res) {
   try {
     const id = req.params.id;
     const obj = req.body;
-    let updatedRecord = await req.model.update(id, obj)
-    res.status(200).json(updatedRecord);
+    let updatedRiddle = await riddles.update(id, obj)
+    res.status(200).json(updatedRiddle);
   } catch (err) {
     console.error(err)
   }
 }
 
-async function handleDelete(req, res) {
+async function handleDeleteRiddle(req, res) {
   try {
     let id = req.params.id;
-    let deletedRecord = await req.model.delete(id);
-    res.status(200).json(deletedRecord);
+    let deletedRiddle = await riddles.delete(id);
+    res.status(200).json(deletedRiddle);
   } catch (err) {
     console.error(err)
   }
 }
-
 
 module.exports = router;
