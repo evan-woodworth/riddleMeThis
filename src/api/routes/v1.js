@@ -13,7 +13,7 @@ router.get('/answer/:id', handleGetAnswer);
 
 async function handleGetRandomRiddle(req, res) {
   try {
-    let randomRiddle = await riddle.findOne({where: {order: 'random()'}});
+    let randomRiddle = await riddle.findAll({ order: Sequelize.literal('rand()'), limit: 1 });
     res.status(200).json(randomRiddle);
   } catch (err) {
     console.error(err)

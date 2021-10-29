@@ -36,7 +36,7 @@ async function handleUpdateRiddle(req, res) {
 async function handleDeleteRiddle(req, res) {
   try {
     let id = req.params.id;
-    let deletedRiddle = await riddle.delete(id);
+    let deletedRiddle = await riddle.destroy({ where: { id }});
     res.status(200).json(deletedRiddle);
   } catch (err) {
     console.error(err)
