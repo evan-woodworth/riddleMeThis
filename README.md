@@ -47,8 +47,8 @@ A riddle factory. Users can upload their own riddles with solutions, and view ra
 
 ## Links to application deployment
 
-Heroku: 
-Github Pull Request: 
+Heroku: https://evan-cameron-tray-riddle-this.herokuapp.com/  
+Github Pull Request: https://github.com/evan-woodworth/riddleMeThis/pull/13
 
 ## UML
 
