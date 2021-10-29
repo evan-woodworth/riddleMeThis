@@ -19,41 +19,54 @@ afterAll(async (done) => {
   done();
 });
 
-describe('Testing V1 routes', () => {
-  
-  it('POST /api/v1/:model adds an item to the DB and returns an object with the added item', async () => {
-    let response = await request.post('/api/v1/clothes').send({
-      name: 'shirt',
-      color: 'red',
-      size: 'large',
-    });
-    expect(response.text).toContain('shirt');
-  })
+describe('Testing V1 routes', async () => {
 
-  it('GET /api/v1/:model returns a list of :model items', async () => {
-    let response = await request.get('/api/v1/clothes');
+  // establishing editor to seed data
+  const userResponse = await request.post('/signup').send({ username: 'editor', password: 'password', role: 'editor' });
 
-    expect(response.text).toContain('shirt');
-  })
+  const signResponse = await request.post('/signin')
+    .auth('editor','password');
 
-  it('GET /api/v1/:model/ID returns a single item by ID', async () => {
-    let response = await request.get('/api/v1/clothes/1');
+  const token = signResponse.body.token;
 
-    expect(response.text).toContain('shirt');
-  })
-
-  it('PUT /api/v1/:model/ID returns a single, updated item by ID', async () => {
-    let response = await request.put('/api/v1/clothes/1').send({
-      name: 'pants',
+  let firstResponse = await request.post('/api/v2/riddle')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      question: 'A riddle?',
+      answer: 'yes, a riddle',
+      hint: '¯\_(ツ)_/¯',
     });
 
-    expect(response.text).toContain('pants');
+  let secondResponse = await request.post('/api/v2/riddle')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      question: 'A second riddle?',
+      answer: 'yes, a second riddle',
+      hint: '_/¯(ツ)¯\_',
+    });
+
+  it('GET /api/v1/riddle returns a riddle', async () => {
+    let response = await request.get('/api/v1/riddle');
+    console.log('-------Get /v1/riddle', response.text);
+    expect(response.status).toBe(200);
   })
 
-  it('DELETE /api/v1/:model/ID returns an empty object. Subsequent GET for the same ID should result in nothing found', async () => {
-    let response = await request.delete('/api/v1/clothes/1');
+  it('GET /api/v1/riddle/:id returns a riddle by ID', async () => {
+    let response = await request.get('/api/v1/riddle/1');
+    console.log('-------Get /v1/riddle/:id', response.text);
+    expect(response.status).toBe(200);
+  })
 
-    expect(response.text).toContain('1');
+  it('GET /api/v1/hint/:id returns a hint by riddle ID', async () => {
+    let response = await request.get('/api/v1/hint/1');
+    console.log('-------Get /v1/hint/:id', response.text);
+    expect(response.status).toBe(200);
+  })
+
+  it('GET /api/v1/answer/:id returns an answer by riddle ID', async () => {
+    let response = await request.get('/api/v1/answer/1');
+    console.log('-------Get /v1/answer/:id', response.text);
+    expect(response.status).toBe(200);
   })
 
 })
