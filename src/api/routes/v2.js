@@ -26,7 +26,7 @@ async function handleUpdateRiddle(req, res) {
   try {
     const id = req.params.id;
     const obj = req.body;
-    let updatedRiddle = await riddle.update(obj, {where: id});
+    let updatedRiddle = await riddle.update(obj, {where: { id }});
     res.status(200).json(updatedRiddle);
   } catch (err) {
     console.error(err)
