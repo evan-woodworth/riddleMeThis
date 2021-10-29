@@ -16,7 +16,7 @@ async function handleGetRandomRiddle(req, res) {
   try {
     let randomRiddle = await riddle.findAll({
       order: [
-        Sequelize.fn( 'RAND' ),
+        Sequelize.fn( 'RANDOM' ),
       ], limit: 1
     });
     res.status(200).json(randomRiddle);
