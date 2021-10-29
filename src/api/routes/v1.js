@@ -6,6 +6,7 @@ const { riddle } = require('../../models');
 
 const router = express.Router();
 
+const Sequelize = require('sequelize');
 router.get('/riddle', handleGetRandomRiddle);
 router.get('/riddle/:id', handleGetOneRiddle);
 router.get('/hint/:id', handleGetHint);
