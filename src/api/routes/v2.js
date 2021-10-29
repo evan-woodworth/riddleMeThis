@@ -2,7 +2,7 @@
 'use strict';
 
 const express = require('express');
-const { riddles } = require('../../models');
+const {riddle} = require('../../models/index.js');
 const bearerHandler = require('../../auth/middleware/bearer.js');
 const aclHandler = require('../../auth/middleware/acl.js');
 
@@ -15,7 +15,7 @@ router.delete('/riddle/:id', bearerHandler, aclHandler('delete'), handleDeleteRi
 async function handleCreateRiddle(req, res) {
   try {
     let obj = req.body;
-    let newRiddle = await riddles.create(obj);
+    let newRiddle = await riddle.create(obj);
     res.status(201).json(newRiddle);
   } catch (err) {
     console.error(err)
@@ -26,7 +26,7 @@ async function handleUpdateRiddle(req, res) {
   try {
     const id = req.params.id;
     const obj = req.body;
-    let updatedRiddle = await riddles.update(id, obj)
+    let updatedRiddle = await riddle.update(id, obj)
     res.status(200).json(updatedRiddle);
   } catch (err) {
     console.error(err)
@@ -36,7 +36,7 @@ async function handleUpdateRiddle(req, res) {
 async function handleDeleteRiddle(req, res) {
   try {
     let id = req.params.id;
-    let deletedRiddle = await riddles.delete(id);
+    let deletedRiddle = await riddle.delete(id);
     res.status(200).json(deletedRiddle);
   } catch (err) {
     console.error(err)
