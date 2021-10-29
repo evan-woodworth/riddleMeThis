@@ -14,10 +14,10 @@ router.get('/answer/:id', handleGetAnswer);
 
 async function handleGetRandomRiddle(req, res) {
   try {
-    let randomRiddle = await riddle.find({
+    let randomRiddle = await riddle.findAll({
       order: [
         Sequelize.fn( 'RAND' ),
-      ]
+      ], limit: 1
     });
     res.status(200).json(randomRiddle);
   } catch (err) {
