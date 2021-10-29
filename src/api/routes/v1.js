@@ -13,7 +13,7 @@ router.get('/answer/:id', handleGetAnswer);
 
 async function handleGetRandomRiddle(req, res) {
   try {
-    let randomRiddle = await riddle.findOne({order: 'random()'});
+    let randomRiddle = await riddle.findOne({where: {order: 'random()'}});
     res.status(200).json(randomRiddle);
   } catch (err) {
     console.error(err)
@@ -23,7 +23,7 @@ async function handleGetRandomRiddle(req, res) {
 async function handleGetOneRiddle(req, res) {
   try {
     const id = req.params.id;
-    let theRiddle = await riddle.findById(id);
+    let theRiddle = await riddle.findByPk(id);
     res.status(200).json(theRiddle);
   } catch (err) {
     console.error(err)
@@ -33,7 +33,7 @@ async function handleGetOneRiddle(req, res) {
 async function handleGetHint(req, res) {
   try {
     const id = req.params.id;
-    let theRiddle = await riddle.findById(id);
+    let theRiddle = await riddle.findByPk(id);
     let theHint = { hint: 'No hints available.' }
     if (theRiddle.hint) {
       theHint = theRiddle.hint;
