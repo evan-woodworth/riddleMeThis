@@ -19,7 +19,7 @@ async function handleGetRandomRiddle(req, res) {
         Sequelize.fn( 'RANDOM' ),
       ], limit: 1
     });
-    res.status(200).json(randomRiddle);
+    res.status(200).json({id:randomRiddle[0].id,question:randomRiddle[0].question});
   } catch (err) {
     console.error(err)
   }
